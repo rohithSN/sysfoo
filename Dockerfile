@@ -1,8 +1,8 @@
-FROM maven:3.6.3-jdk-11-slim as build
-WORKDIR /opt/demo
-COPY . /opt/demo
-RUN mvn package -DskipTests
+# Use a specific version of Tomcat as base image
+FROM tomcat:8.0.20-jre8
 
-FROM tomcat:jre8-openjdk-slim-buster as run
-WORKDIR /usr/local/tomcat
-COPY --from=build /opt/demo/target/sysfoo.war webapps/ROOT.war
+# Expose port 8080 to access the application
+EXPOSE 8080
+
+# Copy the WAR file from the target directory of your Maven project to the Tomcat webapps directory
+COPY /target/sysfoo.war /usr/local/tomcat/webapps/
