@@ -2,6 +2,9 @@ pipeline {
      agent {
         label 'slave'
     }
+     tools {
+        maven "Maven3"
+    }
     
     environment {
         DOCKER_REGISTRY = 'rohithsn/assignment'
@@ -18,6 +21,13 @@ pipeline {
                 git branch: 'master', url: 'https://github.com/rohithSN/sysfoo.git'
             }
         }
-        
+       stage('Build') {
+            steps {
+                script {
+                    sh 'mvn clean install' 
+                }
+            }
+        }
+ 
     }
 }
