@@ -47,5 +47,24 @@ pipeline {
                 }
             }
         }  
+      stage('Push Docker Image') {
+            steps {
+                sh "docker push rohithsn/assignment:${DOCKER_TAG}"
+            }
+        }
+
+        stage('SSH into Remote Ubuntu Machine') {
+            steps {
+                sshagent(credentials: ['remote-ssh-key']) {
+                    sh """
+                        ssh -o StrictHostKeyChecking=no ${REMOTE_USER}@${REMOTE_HOST} << 'EOF'
+                       
+                        docker pull rohithsn/assignment:${DOCKER_TAG}
+                        docker run -d --name my_cicd -p 9000:8080 rohithsn/assignment:${DOCKER_TAG}
+                        EOF
+                    """
+                }
+            }
+        } 
     }
 }
