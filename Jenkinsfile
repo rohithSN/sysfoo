@@ -1,5 +1,7 @@
 pipeline {
-    agent any
+     agent {
+        label 'slave'
+    }
     
     environment {
         DOCKER_REGISTRY = 'rohithsn/assignment'
@@ -11,10 +13,11 @@ pipeline {
     }
     
     stages {
-       stage('Git Checkout') {
+       stage('Git Checkout - GitHub') {
             steps {
                 git branch: 'master', url: 'https://github.com/rohithSN/sysfoo.git'
             }
-       }     
+        }
+        
     }
 }
